@@ -1,0 +1,21 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import Http404
+# Create your views here.
+
+from .models import Pet
+
+
+def home(request):
+    pets = Pet.objects.all()
+    return render(request, 'home.html', {'pets': pets})
+
+
+def pet_details(request, id):
+    try:
+        pet = Pet.objects.get(id=id)
+    except Pet.DoesNotExist:
+        raise Http404('Pet not found')
+    return render(request, 'pet_details.html', {'pet': pet})
+
+    return HttpResponse('<p> pet_details view with the id {} </p>'.format(id))
